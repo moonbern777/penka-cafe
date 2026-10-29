@@ -1,0 +1,887 @@
+<!doctype html>
+<html lang="ru">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Кофейня «Пенка»</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Кофейня-пекарня «Пенка»: кофе своей обжарки, круассаны из печи пять раз в день и завтраки до закрытия.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Onest:wght@400;500;600&family=Unbounded:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: arch-framed photos on milk, espresso bands for the oven and footer, one cobalt accent. */
+:root {
+  --bg: #faf8f4;
+  --surface: #ffffff;
+  --fg: #1c1410;
+  --muted: #6b5a4e;
+  --accent: #2b3bd9;
+  --on-accent: #ffffff;
+  --gold: #d9952f;
+  --line: rgba(28, 20, 16, .12);
+  --band: #1c1410;
+  --on-band: #f3ede4;
+  --band-muted: #b9a999;
+
+  --display: "Unbounded", "Arial Black", system-ui, sans-serif;
+  --body: "Onest", "Segoe UI", system-ui, sans-serif;
+  --hand: "Caveat", "Segoe Print", cursive;
+
+  --fs-xs: .8125rem;
+  --fs-sm: .9375rem;
+  --fs-md: 1.0625rem;
+  --fs-lg: clamp(1.2rem, 1.05rem + .6vw, 1.45rem);
+  --fs-xl: clamp(1.6rem, 1.2rem + 1.8vw, 2.6rem);
+  --fs-2xl: clamp(2rem, 1.2rem + 3.6vw, 4.2rem);
+  --fs-hero: clamp(2.1rem, .9rem + 5.2vw, 5.4rem);
+
+  --gutter: clamp(16px, 4vw, 48px);
+  --radius: 22px;
+  --arch: 999px 999px var(--radius) var(--radius);
+  --ease: cubic-bezier(.2, .8, .2, 1);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #120e0b; --surface: #1d1612; --fg: #f2ece3; --muted: #b4a597;
+    --accent: #8191ff; --on-accent: #0e0f2a; --gold: #f0b868;
+    --line: rgba(242, 236, 227, .14); --band: #221a15; --on-band: #f2ece3; --band-muted: #b4a597;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #120e0b; --surface: #1d1612; --fg: #f2ece3; --muted: #b4a597;
+  --accent: #8191ff; --on-accent: #0e0f2a; --gold: #f0b868;
+  --line: rgba(242, 236, 227, .14); --band: #221a15; --on-band: #f2ece3; --band-muted: #b4a597;
+  color-scheme: dark;
+}
+
+*, *::before, *::after { box-sizing: border-box }
+[hidden] { display: none !important }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font: 400 var(--fs-md)/1.6 var(--body);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
+}
+body::before {
+  content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px);
+  z-index: 60; background: var(--bg);
+}
+h1, h2, h3 { font-family: var(--display); font-weight: 600; line-height: 1.08; letter-spacing: -.02em; margin: 0; text-wrap: balance }
+p { margin: 0; text-wrap: pretty }
+a { color: inherit }
+img { display: block; max-width: 100%; height: auto }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; border-radius: 6px }
+::selection { background: var(--accent); color: var(--on-accent) }
+
+.wrap {
+  width: 100%;
+  max-width: 1280px;
+  margin-inline: auto;
+  padding-left: max(var(--gutter), env(safe-area-inset-left, 0px));
+  padding-right: max(var(--gutter), env(safe-area-inset-right, 0px));
+}
+section { scroll-margin-top: 84px }
+.section { padding-block: clamp(72px, 10vw, 140px) }
+
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 10px;
+  font: 500 var(--fs-xs)/1 var(--body); text-transform: uppercase; letter-spacing: .14em; color: var(--muted);
+}
+.eyebrow::before { content: ""; width: 28px; height: 1.5px; background: currentColor }
+.hand { font-family: var(--hand); font-weight: 600; color: var(--accent); font-size: 1.5em; line-height: 1 }
+.lead { font-size: var(--fs-lg); line-height: 1.5; color: var(--muted); max-width: 34ch }
+
+/* Buttons */
+.btn {
+  --b-bg: var(--accent); --b-fg: var(--on-accent);
+  display: inline-flex; align-items: center; gap: 12px;
+  padding: 16px 26px; border-radius: 999px; border: 1.5px solid var(--b-bg);
+  background: var(--b-bg); color: var(--b-fg);
+  font: 500 var(--fs-sm)/1 var(--body); text-decoration: none; cursor: pointer;
+  transition: transform .3s var(--ease), background-color .3s, color .3s;
+}
+.btn svg { width: 18px; height: 18px; transition: transform .3s var(--ease) }
+.btn:hover { transform: translateY(-2px) }
+.btn:hover svg { transform: translateX(4px) }
+.btn-ghost { --b-bg: transparent; --b-fg: var(--fg); border-color: var(--line) }
+.btn-ghost:hover { border-color: var(--fg) }
+
+/* Header */
+.site-header {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 50;
+  border-bottom: 1px solid transparent;
+}
+.header-in { display: flex; align-items: center; gap: 24px; padding-block: 16px }
+.logo { font: 700 1.5rem/1 var(--display); letter-spacing: -.04em; text-decoration: none; display: flex; align-items: baseline; gap: 2px }
+.logo i { width: 9px; height: 9px; border-radius: 50%; background: var(--accent); display: inline-block }
+.status {
+  display: inline-flex; align-items: center; gap: 8px; white-space: nowrap;
+  font-size: var(--fs-xs); color: var(--muted); padding: 7px 12px; border: 1px solid var(--line); border-radius: 999px;
+}
+.status::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: #9a8b80 }
+.status.is-open::before { background: #2fa36b; box-shadow: 0 0 0 0 rgba(47, 163, 107, .5); animation: ping 2s infinite }
+@keyframes ping { 70% { box-shadow: 0 0 0 8px rgba(47, 163, 107, 0) } 100% { box-shadow: 0 0 0 0 rgba(47, 163, 107, 0) } }
+.nav { gap: 28px; margin-left: auto }
+.nav a { text-decoration: none; font-size: var(--fs-sm); position: relative }
+.nav a::after { content: ""; position: absolute; left: 0; right: 100%; bottom: -4px; height: 1.5px; background: currentColor; transition: right .35s var(--ease) }
+.nav a:hover::after { right: 0 }
+.header-cta { padding: 12px 20px }
+.burger { display: none }
+
+@media (min-width: 961px) {
+  /* Desktop: the popover menu is shown inline */
+  .nav[popover] { display: flex; position: static; inset: auto; margin: 0 0 0 auto; padding: 0; border: 0; background: none; color: inherit; overflow: visible; width: auto; height: auto }
+}
+@media (max-width: 960px) {
+  .header-cta, .status-wrap { display: none }
+  .burger {
+    display: grid; place-items: center; margin-left: auto; width: 46px; height: 46px; border-radius: 50%;
+    border: 1px solid var(--line); background: var(--surface); color: var(--fg); cursor: pointer;
+  }
+  .burger svg { width: 20px; height: 20px }
+  .nav[popover] {
+    position: fixed; inset: 0; width: 100%; height: 100%; margin: 0; border: 0;
+    padding: calc(96px + env(safe-area-inset-top, 0px)) max(var(--gutter), env(safe-area-inset-right, 0px)) 40px max(var(--gutter), env(safe-area-inset-left, 0px));
+    background: var(--bg); color: var(--fg);
+    flex-direction: column; gap: 6px;
+  }
+  .nav[popover]:popover-open { display: flex }
+  .nav a { font: 600 clamp(1.8rem, 8vw, 2.6rem)/1.3 var(--display); letter-spacing: -.02em }
+  .nav-close {
+    position: absolute; top: calc(16px + env(safe-area-inset-top, 0px)); right: max(var(--gutter), env(safe-area-inset-right, 0px));
+    width: 46px; height: 46px; border-radius: 50%; border: 1px solid var(--line); background: var(--surface); color: var(--fg); font-size: 1.4rem; cursor: pointer;
+  }
+  .nav .status { margin-top: 24px; align-self: flex-start }
+}
+@media (min-width: 961px) { .nav-close, .nav .status { display: none } }
+
+/* Hero */
+.hero { padding-block: clamp(28px, 5vw, 64px) clamp(56px, 8vw, 110px) }
+.hero-grid { display: grid; grid-template-columns: 1.15fr .85fr; gap: clamp(32px, 5vw, 80px); align-items: center }
+.hero-copy { display: grid; gap: 28px; min-width: 0 }
+.hero h1 { font-size: var(--fs-hero); font-weight: 600; line-height: 1.02; letter-spacing: -.035em }
+.hero h1 .w { display: inline-block; overflow: hidden; vertical-align: top; padding-bottom: .14em; margin-bottom: -.14em }
+.hero h1 .w > span { display: inline-block }
+.hero h1 .accent { color: var(--accent); position: relative }
+.scribble { position: absolute; left: -2%; bottom: -.1em; width: 104%; height: .26em; overflow: visible }
+.scribble path { fill: none; stroke: var(--accent); stroke-width: .07em; vector-effect: non-scaling-stroke; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 0 }
+.hero-actions { display: flex; flex-wrap: wrap; gap: 12px }
+.hero-meta { display: flex; flex-wrap: wrap; gap: 10px 28px; color: var(--muted); font-size: var(--fs-sm); padding-top: 8px; border-top: 1px solid var(--line) }
+.hero-meta b { color: var(--fg); font-weight: 600 }
+.stars { color: var(--gold); letter-spacing: 2px }
+
+.hero-media { position: relative; justify-self: end; width: 100%; max-width: 520px }
+.arch { border-radius: var(--arch); overflow: hidden; background: var(--line) }
+.arch img { width: 100%; height: 100%; object-fit: cover }
+.hero-media .arch { aspect-ratio: 4 / 5.1 }
+.badge {
+  position: absolute; left: -44px; bottom: 56px; width: 142px; height: 142px; border-radius: 50%;
+  background: var(--accent); color: var(--on-accent); display: grid; place-items: center;
+  box-shadow: 0 18px 40px -12px rgba(28, 20, 16, .35);
+}
+.badge svg { position: absolute; inset: 0; width: 100%; height: 100%; animation: spin 22s linear infinite }
+.badge text { fill: currentColor; font: 500 10.5px var(--body); letter-spacing: 2.6px; text-transform: uppercase }
+.badge-core { text-align: center; line-height: 1.05 }
+.badge-core b { display: block; font: 700 1.45rem/1 var(--display); letter-spacing: -.03em }
+.badge-core small { font-size: 11px; opacity: .85 }
+@keyframes spin { to { transform: rotate(360deg) } }
+.note {
+  position: absolute; right: -8px; top: 34px; transform: rotate(6deg);
+  background: var(--surface); color: var(--fg); padding: 10px 16px 12px; border-radius: 14px;
+  box-shadow: 0 14px 30px -14px rgba(28, 20, 16, .4); font: 600 1.35rem/1.05 var(--hand);
+}
+.note span { color: var(--accent) }
+
+@media (max-width: 960px) {
+  .hero-grid { grid-template-columns: 1fr }
+  .hero-media { justify-self: center; max-width: 440px }
+  .badge { left: -6px; bottom: 28px; width: 116px; height: 116px }
+  .badge-core b { font-size: 1.2rem }
+  .note { right: 4px }
+}
+
+/* Marquee */
+.marquee { background: var(--accent); color: var(--on-accent); overflow: hidden; padding-block: 18px; transform: rotate(-1.2deg); margin-inline: -20px }
+.marquee-track { display: flex; width: max-content; animation: marquee 38s linear infinite }
+.marquee ul { display: flex; list-style: none; margin: 0; padding: 0 }
+.marquee li { display: flex; align-items: center; gap: 28px; padding-right: 28px; font: 500 clamp(1rem, .9rem + .5vw, 1.35rem)/1 var(--display); white-space: nowrap }
+.marquee li::after { content: "✺"; font-size: .9em; opacity: .8 }
+@keyframes marquee { to { transform: translateX(-50%) } }
+
+/* Section heads */
+.head { display: grid; gap: 18px; margin-bottom: clamp(36px, 5vw, 64px) }
+.head h2 { font-size: var(--fs-2xl) }
+.head-row { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: 24px }
+
+/* Oven */
+.oven { background: var(--band); color: var(--on-band); position: relative; overflow: hidden }
+.oven .eyebrow, .oven .lead { color: var(--band-muted) }
+.oven-grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(32px, 6vw, 96px); align-items: center }
+.oven-copy { display: grid; gap: 28px; min-width: 0 }
+.oven h2 { font-size: var(--fs-xl) }
+.timer-label { font-size: var(--fs-sm); color: var(--band-muted) }
+.timer { font: 600 clamp(2.8rem, 1.5rem + 6vw, 6rem)/1 var(--display); letter-spacing: -.04em; font-variant-numeric: tabular-nums; color: var(--on-band) }
+.timer small { font: 500 var(--fs-md)/1 var(--body); letter-spacing: 0; color: var(--band-muted); margin-left: 8px }
+.batches { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; margin: 0; padding: 0 }
+.batches li {
+  padding: 9px 14px; border-radius: 999px; border: 1px solid rgba(243, 237, 228, .22);
+  font: 500 var(--fs-sm)/1 var(--body); font-variant-numeric: tabular-nums; color: var(--on-band);
+}
+.batches li.done { opacity: .4; text-decoration: line-through }
+.batches li.next { background: var(--on-band); color: var(--band); border-color: var(--on-band) }
+.oven-media { border-radius: var(--radius); overflow: hidden; aspect-ratio: 7 / 5 }
+.oven-media img { width: 100%; height: 100%; object-fit: cover }
+
+/* About */
+.about-grid { display: grid; grid-template-columns: .9fr 1.1fr; gap: clamp(32px, 6vw, 110px); align-items: center }
+.about-media { position: relative; max-width: 480px; width: 100% }
+.about-media .arch { aspect-ratio: 9 / 11 }
+.about-media .hand { position: absolute; right: -12px; bottom: -22px; transform: rotate(-5deg); font-size: 2rem; background: var(--bg); padding: 4px 12px; border-radius: 12px }
+.about-copy { display: grid; gap: 26px; min-width: 0 }
+.about-copy h2 { font-size: var(--fs-xl) }
+.about-copy > p { font-size: var(--fs-lg); line-height: 1.55; color: var(--muted); max-width: 46ch }
+.facts { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0; margin: 12px 0 0; border-top: 1px solid var(--line) }
+.facts div { padding: 22px 16px 22px 0; border-bottom: 1px solid var(--line) }
+.facts div:nth-child(odd) { border-right: 1px solid var(--line) }
+.facts div:nth-child(even) { padding-left: 24px }
+.facts dt { font: 600 clamp(1.8rem, 1.3rem + 2vw, 2.8rem)/1 var(--display); letter-spacing: -.03em; font-variant-numeric: tabular-nums }
+.facts dd { margin: 8px 0 0; color: var(--muted); font-size: var(--fs-sm) }
+
+/* Menu */
+.menu-grid { display: grid; grid-template-columns: .8fr 1.2fr; gap: clamp(32px, 6vw, 96px); align-items: start }
+.menu-media { position: sticky; top: 100px }
+.menu-media .arch { aspect-ratio: 4 / 5; view-transition-name: menu-photo }
+.tabs { display: flex; gap: 6px; padding: 6px; background: var(--surface); border: 1px solid var(--line); border-radius: 999px; width: max-content; max-width: 100%; overflow-x: auto; scrollbar-width: none }
+.tab {
+  border: 0; background: none; color: var(--muted); cursor: pointer; white-space: nowrap;
+  padding: 12px 20px; border-radius: 999px; font: 500 var(--fs-sm)/1 var(--body); transition: background-color .25s, color .25s;
+}
+.tab:hover { color: var(--fg) }
+.tab[aria-selected="true"] { background: var(--fg); color: var(--bg) }
+@media (max-width: 560px) { .tabs { gap: 2px } .tab { padding: 11px 10px; font-size: .875rem } }
+.menu-list { min-width: 0 }
+.panel { padding-top: 28px; view-transition-name: menu-panel }
+.dishes { list-style: none; margin: 0; padding: 0 }
+.dish { padding: 18px 0; border-bottom: 1px solid var(--line); display: grid; gap: 6px }
+.dish-top { display: flex; align-items: baseline; gap: 12px }
+.dish h3 { font: 500 var(--fs-lg)/1.25 var(--display); letter-spacing: -.02em }
+.dish-top::after { content: ""; order: 1; flex: 1; border-bottom: 1.5px dotted var(--line); transform: translateY(-5px); min-width: 20px }
+.price { order: 2; font: 600 var(--fs-md)/1 var(--display); font-variant-numeric: tabular-nums; white-space: nowrap }
+.dish p { color: var(--muted); font-size: var(--fs-sm) }
+.tag {
+  display: inline-block; vertical-align: middle; margin-left: 8px; padding: 4px 9px 5px; border-radius: 999px;
+  font: 500 11px/1 var(--body); letter-spacing: .06em; text-transform: uppercase;
+  background: var(--accent); color: var(--on-accent); transform: translateY(-3px);
+}
+.tag.soft { background: transparent; color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent) }
+.special {
+  display: grid; gap: 10px; padding: 22px 24px; border-radius: var(--radius);
+  background: var(--surface); border: 1px solid var(--line); margin-bottom: 8px;
+}
+.special-top { display: flex; justify-content: space-between; gap: 16px; align-items: baseline; flex-wrap: wrap }
+.special h3 { font: 600 var(--fs-lg)/1.2 var(--display) }
+.special dl { display: flex; flex-wrap: wrap; gap: 6px 22px; margin: 0; font-size: var(--fs-sm) }
+.special dt { color: var(--muted); display: inline }
+.special dd { display: inline; margin: 0 0 0 6px }
+.menu-foot { margin-top: 24px; color: var(--muted); font-size: var(--fs-sm); display: flex; gap: 10px 24px; flex-wrap: wrap }
+.menu-foot .hand { font-size: 1.45rem }
+
+/* Gallery */
+.gallery { display: grid; grid-template-columns: repeat(4, 1fr); grid-auto-rows: clamp(180px, 20vw, 290px); gap: 14px }
+.shot { position: relative; margin: 0; border-radius: var(--radius); overflow: hidden; background: var(--line) }
+.shot img { width: 100%; height: 100%; object-fit: cover; transition: transform 1s var(--ease) }
+.shot:hover img { transform: scale(1.05) }
+.shot figcaption {
+  position: absolute; left: 14px; bottom: 14px; padding: 8px 14px; border-radius: 999px;
+  background: var(--surface); color: var(--fg); font-size: var(--fs-xs); font-weight: 500;
+}
+.shot.a { grid-column: span 2; grid-row: span 2 }
+.shot.b { grid-row: span 2 }
+@media (max-width: 760px) {
+  .gallery { grid-template-columns: 1fr 1fr; grid-auto-rows: 44vw; gap: 10px }
+  .shot.a { grid-column: span 2; grid-row: span 1 }
+}
+
+/* Reviews */
+.score { display: flex; align-items: center; gap: 18px }
+.score b { font: 600 clamp(2.6rem, 2rem + 2.4vw, 3.8rem)/1 var(--display); letter-spacing: -.04em }
+.score span { color: var(--muted); font-size: var(--fs-sm); line-height: 1.4 }
+.reviews { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; list-style: none; margin: 0; padding: 0 }
+.review { display: flex; flex-direction: column; gap: 18px; padding: 28px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius) }
+.review blockquote { margin: 0; font-size: var(--fs-md); line-height: 1.6; flex: 1 }
+.review footer { display: flex; justify-content: space-between; align-items: center; gap: 12px; font-size: var(--fs-sm) }
+.review cite { font-style: normal; font-weight: 600 }
+.review small { display: block; color: var(--muted); font-weight: 400 }
+.demo-note { margin-top: 24px; color: var(--muted); font-size: var(--fs-sm); display: flex; gap: 10px; align-items: center }
+.demo-note::before { content: "i"; display: grid; place-items: center; flex: none; width: 22px; height: 22px; border-radius: 50%; border: 1px solid currentColor; font: 600 12px/1 var(--display) }
+@media (max-width: 960px) {
+  .reviews {
+    grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: min(84%, 360px);
+    overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 12px; scrollbar-width: thin;
+    margin-right: calc(-1 * max(var(--gutter), env(safe-area-inset-right, 0px)));
+    padding-right: max(var(--gutter), env(safe-area-inset-right, 0px));
+  }
+  .review { scroll-snap-align: start }
+}
+
+/* Booking */
+.book { background: var(--surface); border-block: 1px solid var(--line) }
+.book-grid { display: grid; grid-template-columns: .9fr 1.1fr; gap: clamp(32px, 6vw, 96px); align-items: start }
+.book-copy { display: grid; gap: 26px; min-width: 0 }
+.book-copy h2 { font-size: var(--fs-xl) }
+.contact-list { display: grid; gap: 12px; margin-top: 8px }
+.contact-list a, .contact-list .phone {
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  padding: 18px 22px; border: 1px solid var(--line); border-radius: 16px; text-decoration: none;
+  transition: border-color .25s, transform .3s var(--ease);
+}
+.contact-list a:hover { border-color: var(--fg); transform: translateX(4px) }
+.contact-list span { color: var(--muted); font-size: var(--fs-sm) }
+.contact-list b { font: 500 var(--fs-md)/1.2 var(--display); font-variant-numeric: tabular-nums; user-select: all }
+
+.form { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; padding: clamp(22px, 3vw, 36px); border-radius: calc(var(--radius) + 6px); background: var(--bg); border: 1px solid var(--line) }
+.field { display: grid; gap: 8px; min-width: 0 }
+.field.full { grid-column: 1 / -1 }
+.field label { font-size: var(--fs-xs); font-weight: 500; text-transform: uppercase; letter-spacing: .1em; color: var(--muted) }
+.field input, .field select, .field textarea {
+  width: 100%; font: 400 var(--fs-md)/1.3 var(--body); color: var(--fg);
+  background: var(--surface); border: 1.5px solid var(--line); border-radius: 14px; padding: 15px 16px;
+  transition: border-color .2s, box-shadow .2s;
+}
+.field textarea { resize: vertical; min-height: 96px }
+.field input:focus, .field select:focus, .field textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 18%, transparent) }
+.field input:user-invalid { border-color: #d0453a }
+.form .btn { grid-column: 1 / -1; justify-content: center; padding-block: 19px; font-size: var(--fs-md) }
+.form-fine { grid-column: 1 / -1; font-size: var(--fs-xs); color: var(--muted); text-align: center }
+.done { display: grid; gap: 16px; justify-items: start; padding: clamp(28px, 4vw, 48px); border-radius: calc(var(--radius) + 6px); background: var(--bg); border: 1px solid var(--line) }
+.done h3 { font-size: var(--fs-xl) }
+.done p { color: var(--muted) }
+.done-mark { width: 64px; height: 64px; border-radius: 50%; background: var(--accent); color: var(--on-accent); display: grid; place-items: center }
+.done-mark svg { width: 30px; height: 30px }
+@media (max-width: 560px) { .form { grid-template-columns: 1fr } }
+
+/* Contacts */
+.visit-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: clamp(32px, 6vw, 96px); align-items: center }
+.visit-copy { display: grid; gap: 30px; min-width: 0 }
+.visit-copy h2 { font-size: var(--fs-2xl) }
+.address { font: 500 var(--fs-lg)/1.35 var(--display); letter-spacing: -.01em }
+.address small { display: block; margin-top: 8px; font: 400 var(--fs-sm)/1.5 var(--body); color: var(--muted); letter-spacing: 0 }
+.hours { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums }
+.hours td { padding: 14px 0; border-bottom: 1px solid var(--line) }
+.hours td:last-child { text-align: right; font-weight: 500 }
+.hours tr.today td { color: var(--accent); font-weight: 600 }
+.hours tr.today td:first-child::after { content: " · сегодня"; font-weight: 400 }
+.maps { display: flex; flex-wrap: wrap; gap: 10px }
+.visit-media { position: relative; border-radius: var(--radius); overflow: hidden; aspect-ratio: 14 / 10 }
+.visit-media img { width: 100%; height: 100%; object-fit: cover }
+.pin {
+  position: absolute; left: 50%; top: 46%; translate: -50% -50%;
+  display: flex; align-items: center; gap: 10px; padding: 12px 18px 12px 12px; border-radius: 999px;
+  background: var(--surface); color: var(--fg); font: 500 var(--fs-sm)/1 var(--body); box-shadow: 0 16px 40px -10px rgba(0, 0, 0, .5);
+}
+.pin i { width: 28px; height: 28px; border-radius: 50%; background: var(--accent); position: relative }
+.pin i::after { content: ""; position: absolute; inset: 0; border-radius: 50%; border: 2px solid var(--accent); animation: ring 2.2s var(--ease) infinite }
+@keyframes ring { to { transform: scale(2.2); opacity: 0 } }
+
+/* Footer */
+.footer { background: var(--band); color: var(--on-band); padding-top: clamp(64px, 8vw, 110px); overflow: hidden }
+.footer-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; padding-bottom: 48px; border-bottom: 1px solid rgba(243, 237, 228, .14) }
+.footer h3 { font: 500 var(--fs-xs)/1 var(--body); text-transform: uppercase; letter-spacing: .14em; color: var(--band-muted); margin-bottom: 14px }
+.footer p, .footer a { font-size: var(--fs-sm); line-height: 1.8 }
+.footer a { text-decoration: none; display: block; width: max-content }
+.footer a:hover { text-decoration: underline }
+.footer .wordmark {
+  font: 700 clamp(4rem, 21vw, 19rem)/.78 var(--display); letter-spacing: -.07em;
+  margin: 28px 0 0 -.04em; white-space: nowrap; color: var(--on-band);
+}
+.footer .wordmark span { color: var(--accent) }
+.footer-fine { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; padding-block: 22px; font-size: var(--fs-xs); color: var(--band-muted) }
+@media (max-width: 760px) { .footer-grid { grid-template-columns: 1fr 1fr } }
+
+/* Mobile action bar */
+.actionbar { display: none }
+@media (max-width: 760px) {
+  .actionbar {
+    position: fixed; z-index: 40; left: 0; right: 0; bottom: 0;
+    display: grid; grid-template-columns: 1fr 1fr 1.3fr; gap: 8px;
+    padding: 10px max(12px, env(safe-area-inset-right, 0px)) calc(10px + env(safe-area-inset-bottom, 0px)) max(12px, env(safe-area-inset-left, 0px));
+    background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    border-top: 1px solid var(--line);
+  }
+  .actionbar a {
+    display: flex; align-items: center; justify-content: center; gap: 8px; padding: 14px 8px; border-radius: 14px;
+    border: 1px solid var(--line); background: var(--surface); text-decoration: none; font: 500 var(--fs-sm)/1 var(--body);
+  }
+  .actionbar a:last-child { background: var(--accent); color: var(--on-accent); border-color: var(--accent) }
+  .actionbar svg { width: 18px; height: 18px }
+  .footer { padding-bottom: calc(76px + env(safe-area-inset-bottom, 0px)) }
+}
+
+@media (max-width: 960px) {
+  .oven-grid, .about-grid, .menu-grid, .book-grid, .visit-grid { grid-template-columns: 1fr }
+  .about-media { justify-self: center }
+  .menu-media { position: static }
+  .menu-media .arch { aspect-ratio: 16 / 10; border-radius: var(--radius) }
+}
+
+/* Motion: load sequence for the hero, scroll-linked reveals where the browser supports them */
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth }
+  .hero h1 .w > span { animation: word .9s var(--ease) both; animation-delay: calc(.08s * var(--i) + .1s) }
+  .scribble path { stroke-dashoffset: 1; animation: draw .8s .95s var(--ease) forwards }
+  .hero-copy > :not(h1) { animation: fade .8s .55s var(--ease) both }
+  .hero-media .arch { animation: unveil 1.2s .15s var(--ease) both }
+  .hero-media .arch img { animation: settle 1.6s .15s var(--ease) both }
+  .badge, .note { animation: pop .7s 1s var(--ease) both }
+
+  @supports (animation-timeline: view()) {
+    .site-header { animation: solidify linear both; animation-timeline: scroll(root); animation-range: 0 140px }
+    .rise { animation: rise linear both; animation-timeline: view(); animation-range: entry 0% entry 80% }
+    .drift img { animation: drift linear both; animation-timeline: view() }
+    .wordmark { animation: slide linear both; animation-timeline: view(); animation-range: entry 0% exit 0% }
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track, .badge svg, .status.is-open::before, .pin i::after { animation: none }
+  ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none }
+}
+@supports not (animation-timeline: view()) {
+  .site-header { background: color-mix(in srgb, var(--bg) 86%, transparent); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-bottom-color: var(--line) }
+}
+@keyframes word { from { transform: translateY(105%) } }
+@keyframes draw { to { stroke-dashoffset: 0 } }
+@keyframes fade { from { opacity: 0; transform: translateY(18px) } }
+@keyframes unveil { from { clip-path: inset(100% 0 0 0) } to { clip-path: inset(0) } }
+@keyframes settle { from { transform: scale(1.25) } }
+@keyframes pop { from { opacity: 0; transform: scale(.6) rotate(-12deg) } }
+@keyframes solidify {
+  to { background: color-mix(in srgb, var(--bg) 86%, transparent); backdrop-filter: blur(14px); border-bottom-color: var(--line) }
+}
+@keyframes rise { from { opacity: 0; transform: translateY(56px) } }
+@keyframes drift { from { transform: translateY(-7%) scale(1.16) } to { transform: translateY(7%) scale(1.16) } }
+@keyframes slide { from { transform: translateX(12%) } to { transform: translateX(-4%) } }
+</style>
+
+<header class="site-header">
+  <div class="wrap header-in">
+    <a class="logo" href="#top" aria-label="Пенка, на главную">пенка<i></i></a>
+    <span class="status-wrap"><span class="status" data-status>Открыто</span></span>
+    <button class="burger" popovertarget="nav" aria-label="Открыть меню">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 8h16M4 16h16"/></svg>
+    </button>
+    <nav class="nav" id="nav" popover aria-label="Разделы сайта">
+      <button class="nav-close" popovertarget="nav" popovertargetaction="hide" aria-label="Закрыть меню">×</button>
+      <a href="#menu">Меню</a>
+      <a href="#oven">Из печи</a>
+      <a href="#about">О нас</a>
+      <a href="#reviews">Отзывы</a>
+      <a href="#visit">Контакты</a>
+      <span class="status" data-status>Открыто</span>
+    </nav>
+    <a class="btn header-cta" href="#book">Забронировать</a>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div class="hero-copy">
+        <span class="eyebrow">Кофейня-пекарня на Садовой</span>
+        <h1 aria-label="Хорошее утро начинается с пенки">
+          <span class="w" aria-hidden="true"><span style="--i:0">Хорошее</span></span>
+          <span class="w" aria-hidden="true"><span style="--i:1">утро</span></span>
+          <span class="w" aria-hidden="true"><span style="--i:2">начинается</span></span>
+          <span class="w" aria-hidden="true"><span style="--i:3">с</span></span>
+          <span class="w" aria-hidden="true"><span style="--i:4" class="accent">пенки<svg class="scribble" viewBox="0 0 200 20" preserveAspectRatio="none"><path pathLength="1" d="M3 13c40-8 90-11 140-7 20 1.5 38 4 54 7"/></svg></span></span>
+        </h1>
+        <p class="lead">Варим кофе из зерна своей обжарки, печём круассаны с шести утра и подаём завтраки до самого закрытия.</p>
+        <div class="hero-actions">
+          <a class="btn" href="#menu">Смотреть меню
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          <a class="btn btn-ghost" href="#book">Забронировать стол</a>
+        </div>
+        <div class="hero-meta">
+          <span><span class="stars">★★★★★</span> <b>4,9</b> · 1 240 отзывов</span>
+          <span><b>Садовая, 12</b> · 5 минут от центральной площади</span>
+        </div>
+      </div>
+
+      <div class="hero-media">
+        <div class="arch">
+          <img src="img/hero.jpg" width="900" height="1150" alt="Два капучино с латте-артом на деревянном столе среди зелени" fetchpriority="high">
+        </div>
+        <div class="badge" aria-label="Первая партия выпечки в 8:00">
+          <svg viewBox="0 0 142 142" aria-hidden="true">
+            <defs><path id="circle" d="M71 71m-55 0a55 55 0 1 1 110 0a55 55 0 1 1-110 0"/></defs>
+            <text><textPath href="#circle">свежая выпечка · каждое утро · </textPath></text>
+          </svg>
+          <div class="badge-core" aria-hidden="true"><b>8:00</b><small>первая партия</small></div>
+        </div>
+        <div class="note" aria-hidden="true">альт. молоко<br><span>без доплаты</span></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="marquee">
+    <div class="marquee-track">
+      <ul>
+        <li>Фильтр-кофе дня</li><li>Круассаны из своей печи</li><li>Завтраки весь день</li><li>В свою кружку −10%</li><li>Хлеб на закваске</li>
+      </ul>
+      <ul aria-hidden="true">
+        <li>Фильтр-кофе дня</li><li>Круассаны из своей печи</li><li>Завтраки весь день</li><li>В свою кружку −10%</li><li>Хлеб на закваске</li>
+      </ul>
+    </div>
+  </div>
+
+  <section class="section" id="menu">
+    <div class="wrap">
+      <div class="head">
+        <span class="eyebrow">Меню</span>
+        <h2>Что у нас вкусного</h2>
+      </div>
+    </div>
+    <div class="wrap menu-grid">
+      <div class="menu-media drift rise">
+        <div class="arch"><img id="menu-photo" src="img/coffee.jpg" width="800" height="1000" alt="Чашка чёрного кофе, вид сверху" loading="lazy" decoding="async"></div>
+      </div>
+
+      <div class="menu-list">
+        <div class="tabs" role="tablist" aria-label="Разделы меню">
+          <button class="tab" role="tab" id="t-coffee" aria-selected="true" aria-controls="p-coffee" data-img="img/coffee.jpg" data-alt="Чашка чёрного кофе, вид сверху">Кофе</button>
+          <button class="tab" role="tab" id="t-breakfast" aria-selected="false" aria-controls="p-breakfast" tabindex="-1" data-img="img/breakfast.jpg" data-alt="Французский тост с бананом и черникой">Завтраки</button>
+          <button class="tab" role="tab" id="t-bakery" aria-selected="false" aria-controls="p-bakery" tabindex="-1" data-img="img/bakery.jpg" data-alt="Горка свежих круассанов">Выпечка</button>
+          <button class="tab" role="tab" id="t-dessert" aria-selected="false" aria-controls="p-dessert" tabindex="-1" data-img="img/dessert.jpg" data-alt="Шоколадный торт с кремом">Десерты</button>
+        </div>
+
+        <div class="panel" role="tabpanel" id="p-coffee" aria-labelledby="t-coffee">
+          <div class="special">
+            <div class="special-top"><h3>Фильтр дня</h3><span class="price">230 ₽ · 300 мл</span></div>
+            <dl>
+              <div><dt>Зерно</dt><dd>Эфиопия, Иргачефф</dd></div>
+              <div><dt>Обработка</dt><dd>мытая</dd></div>
+              <div><dt>Ноты</dt><dd>бергамот, абрикос, жасмин</dd></div>
+              <div><dt>Заваривание</dt><dd>V60</dd></div>
+            </dl>
+          </div>
+          <ul class="dishes">
+            <li class="dish"><div class="dish-top"><h3>Эспрессо</h3><span class="price">160 ₽</span></div><p>Бленд дня: молочный шоколад, фундук · 30 мл</p></li>
+            <li class="dish"><div class="dish-top"><h3>Капучино</h3><span class="price">220 / 260 ₽</span></div><p>Плотная бархатная пенка · 250 / 350 мл</p></li>
+            <li class="dish"><div class="dish-top"><h3>Флэт уайт</h3><span class="price">250 ₽</span></div><p>Двойной эспрессо и тонкий слой молока · 200 мл</p></li>
+            <li class="dish"><div class="dish-top"><h3>Раф «Пенка»<span class="tag">хит</span></h3><span class="price">290 ₽</span></div><p>Сливки, ваниль и щепотка морской соли · 300 мл</p></li>
+            <li class="dish"><div class="dish-top"><h3>Матча латте</h3><span class="price">310 ₽</span></div><p>Японская матча, молоко на выбор · 300 мл</p></li>
+          </ul>
+        </div>
+
+        <div class="panel" role="tabpanel" id="p-breakfast" aria-labelledby="t-breakfast" hidden>
+          <ul class="dishes">
+            <li class="dish"><div class="dish-top"><h3>Сырники со сметаной<span class="tag">хит</span></h3><span class="price">390 ₽</span></div><p>С ягодным соусом и свежей черникой · 220 г</p></li>
+            <li class="dish"><div class="dish-top"><h3>Яйцо пашот на тосте</h3><span class="price">450 ₽</span></div><p>Хлеб на закваске, авокадо, голландский соус · 260 г</p></li>
+            <li class="dish"><div class="dish-top"><h3>Французский тост</h3><span class="price">420 ₽</span></div><p>Бриошь, банан, черника, кленовый сироп · 240 г</p></li>
+            <li class="dish"><div class="dish-top"><h3>Шакшука с фетой</h3><span class="price">470 ₽</span></div><p>Томаты, перец, два яйца и тост к ней · 320 г</p></li>
+            <li class="dish"><div class="dish-top"><h3>Овсянка на кокосовом<span class="tag soft">веган</span></h3><span class="price">330 ₽</span></div><p>С карамелизированным яблоком и орехами · 250 г</p></li>
+            <li class="dish"><div class="dish-top"><h3>Омлет с сыром и зеленью</h3><span class="price">380 ₽</span></div><p>Три яйца, сыр гауда, салат · 250 г</p></li>
+          </ul>
+        </div>
+
+        <div class="panel" role="tabpanel" id="p-bakery" aria-labelledby="t-bakery" hidden>
+          <ul class="dishes">
+            <li class="dish"><div class="dish-top"><h3>Круассан классический<span class="tag">хит</span></h3><span class="price">180 ₽</span></div><p>Тесто на сливочном масле 82%, раскатываем три дня · 80 г</p></li>
+            <li class="dish"><div class="dish-top"><h3>Круассан с миндальным кремом</h3><span class="price">240 ₽</span></div><p>Франжипан и миндальные лепестки · 110 г</p></li>
+            <li class="dish"><div class="dish-top"><h3>Пен-о-шоколя</h3><span class="price">210 ₽</span></div><p>Две палочки бельгийского шоколада · 90 г</p></li>
+            <li class="dish"><div class="dish-top"><h3>Булочка с кардамоном</h3><span class="price">260 ₽</span></div><p>Корица, кардамон и сливочная глазурь · 140 г</p></li>
+            <li class="dish"><div class="dish-top"><h3>Киш с лососем и шпинатом</h3><span class="price">390 ₽</span></div><p>Песочная основа, сливочная заливка · 180 г</p></li>
+            <li class="dish"><div class="dish-top"><h3>Хлеб на закваске<span class="tag soft">с собой</span></h3><span class="price">320 ₽</span></div><p>Пшенично-ржаной, ферментация 36 часов · 600 г</p></li>
+          </ul>
+        </div>
+
+        <div class="panel" role="tabpanel" id="p-dessert" aria-labelledby="t-dessert" hidden>
+          <ul class="dishes">
+            <li class="dish"><div class="dish-top"><h3>Баскский чизкейк<span class="tag">хит</span></h3><span class="price">340 ₽</span></div><p>Карамельная корочка, нежная середина · 140 г</p></li>
+            <li class="dish"><div class="dish-top"><h3>Шоколадный торт с вишней</h3><span class="price">360 ₽</span></div><p>Тёмный шоколад 70% и вишнёвый конфи · 130 г</p></li>
+            <li class="dish"><div class="dish-top"><h3>Медовик</h3><span class="price">320 ₽</span></div><p>Восемь коржей и сметанный крем · 150 г</p></li>
+            <li class="dish"><div class="dish-top"><h3>Морковный торт</h3><span class="price">330 ₽</span></div><p>Грецкий орех, апельсин, крем-чиз · 140 г</p></li>
+            <li class="dish"><div class="dish-top"><h3>Тарт с ягодами</h3><span class="price">350 ₽</span></div><p>Ванильный крем и сезонные ягоды · 120 г</p></li>
+            <li class="dish"><div class="dish-top"><h3>Мороженое ручной работы</h3><span class="price">220 ₽</span></div><p>Два шарика: пломбир, фисташка или солёная карамель</p></li>
+          </ul>
+        </div>
+
+        <div class="menu-foot">
+          <span>Цены в рублях. Меню обновляем каждый сезон.</span>
+          <span class="hand">вторая чашка фильтра −50%</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section oven" id="oven">
+    <div class="wrap oven-grid">
+      <div class="oven-copy">
+        <span class="eyebrow">Из печи</span>
+        <h2>Круассаны выходят из печи пять раз в день</h2>
+        <div>
+          <p class="timer-label" data-oven-label>Следующая партия через</p>
+          <p class="timer" data-oven-timer>00:00:00</p>
+        </div>
+        <ul class="batches" aria-label="Время выхода партий">
+          <li data-batch="8:00">8:00</li><li data-batch="10:30">10:30</li><li data-batch="13:00">13:00</li><li data-batch="15:30">15:30</li><li data-batch="18:00">18:00</li>
+        </ul>
+        <p class="lead">Приходите к выходу партии: тёплые круассаны разбирают минут за двадцать.</p>
+      </div>
+      <div class="oven-media drift rise">
+        <img src="img/oven.jpg" width="1400" height="1000" alt="Круассан на тёмном столе, присыпанный мукой" loading="lazy" decoding="async">
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="about">
+    <div class="wrap about-grid">
+      <div class="about-media rise">
+        <div class="arch drift"><img src="img/about.jpg" width="900" height="1100" alt="Столик у окна с кемексом, чайником и зеленью" loading="lazy" decoding="async"></div>
+        <span class="hand">место у окна — наше любимое</span>
+      </div>
+      <div class="about-copy rise">
+        <span class="eyebrow">О нас</span>
+        <h2>Маленькая кофейня с большой печью</h2>
+        <p>«Пенку» открыли в 2019 году два бариста и пекарь. Мы сами обжариваем зерно небольшими партиями раз в неделю, а тесто для круассанов раскатываем вручную три дня.</p>
+        <dl class="facts">
+          <div><dt>2019</dt><dd>год, когда мы открылись</dd></div>
+          <div><dt>12</dt><dd>сортов зерна за сезон</dd></div>
+          <div><dt>3 дня</dt><dd>готовится тесто для круассанов</dd></div>
+          <div><dt>40</dt><dd>мест в зале и 16 на веранде</dd></div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0" aria-labelledby="gallery-title">
+    <div class="wrap">
+      <div class="head head-row">
+        <div class="head" style="margin:0">
+          <span class="eyebrow">Интерьер</span>
+          <h2 id="gallery-title">Заходите в гости</h2>
+        </div>
+        <p class="lead">Светлый зал, большие окна и розетки у каждого второго столика.</p>
+      </div>
+      <div class="gallery">
+        <figure class="shot a rise"><img src="img/hall.jpg" width="1200" height="800" alt="Светлый зал кофейни с деревянными столами" loading="lazy" decoding="async"><figcaption>Зал на 40 мест</figcaption></figure>
+        <figure class="shot b rise"><img src="img/vitrine.jpg" width="800" height="1000" alt="Витрина со свежим хлебом и выпечкой" loading="lazy" decoding="async"><figcaption>Витрина</figcaption></figure>
+        <figure class="shot rise"><img src="img/bar.jpg" width="800" height="800" alt="Барная стойка с кофемашиной" loading="lazy" decoding="async"><figcaption>Бар</figcaption></figure>
+        <figure class="shot rise"><img src="img/toast.jpg" width="800" height="800" alt="Тост с яйцом и авокадо" loading="lazy" decoding="async"><figcaption>Завтраки весь день</figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="reviews" style="padding-top:0">
+    <div class="wrap">
+      <div class="head head-row">
+        <div class="head" style="margin:0">
+          <span class="eyebrow">Отзывы</span>
+          <h2>Что о нас пишут</h2>
+        </div>
+        <div class="score">
+          <b>4,9</b>
+          <span><span class="stars">★★★★★</span><br>1 240 отзывов на Яндекс Картах,<br>в 2ГИС и Google</span>
+        </div>
+      </div>
+      <ul class="reviews">
+        <li class="review rise"><blockquote>Лучшие круассаны в городе, без преувеличения. Хожу к открытию, пока тёплые. Капучино идеальный, пенка как бархат.</blockquote><footer><cite>Анна К.<small>Яндекс Карты</small></cite><span class="stars">★★★★★</span></footer></li>
+        <li class="review rise"><blockquote>Работаю здесь с ноутбуком по утрам: есть розетки, быстрый Wi-Fi, и никто не торопит. Фильтр каждый день разный, бариста всегда расскажет, что за зерно.</blockquote><footer><cite>Дмитрий<small>2ГИС</small></cite><span class="stars">★★★★★</span></footer></li>
+        <li class="review rise"><blockquote>Отмечали день рождения подруги, стол забронировали через сайт за пять минут. Медовик — отдельная любовь.</blockquote><footer><cite>Мария Л.<small>Google</small></cite><span class="stars">★★★★★</span></footer></li>
+        <li class="review rise"><blockquote>Сырники как у бабушки, только ещё лучше. Порции большие, цены честные.</blockquote><footer><cite>Илья<small>Яндекс Карты</small></cite><span class="stars">★★★★★</span></footer></li>
+        <li class="review rise"><blockquote>Очень уютно, но в выходные к одиннадцати бывает очередь. Двигается она быстро, и оно того стоит.</blockquote><footer><cite>Екатерина<small>2ГИС</small></cite><span class="stars">★★★★☆</span></footer></li>
+        <li class="review rise"><blockquote>Взял домой хлеб на закваске и теперь беру каждую субботу. Корочка хрустит, мякиш влажный, хлеб не черствеет несколько дней.</blockquote><footer><cite>Олег<small>Google</small></cite><span class="stars">★★★★★</span></footer></li>
+      </ul>
+      <p class="demo-note">Это демо-концепт: на настоящем сайте здесь будут реальные отзывы с ваших карточек на картах.</p>
+    </div>
+  </section>
+
+  <section class="section book" id="book">
+    <div class="wrap book-grid">
+      <div class="book-copy">
+        <span class="eyebrow">Бронирование</span>
+        <h2>Забронировать стол</h2>
+        <p class="lead">Оставьте заявку, и администратор перезвонит в течение 10 минут, чтобы подтвердить бронь.</p>
+        <div class="contact-list">
+          <!-- Demo contacts: replace with the client's phone and messenger links -->
+          <div class="phone"><span>Телефон</span><b>+7 000 000-00-00</b></div>
+          <a href="https://t.me/" target="_blank" rel="noopener"><span>Написать в Telegram</span><b>→</b></a>
+          <a href="https://wa.me/" target="_blank" rel="noopener"><span>Написать в WhatsApp</span><b>→</b></a>
+        </div>
+      </div>
+
+      <div>
+        <form class="form" id="book-form">
+          <div class="field"><label for="b-name">Имя</label><input id="b-name" name="name" autocomplete="name" required placeholder="Как к вам обращаться"></div>
+          <div class="field"><label for="b-phone">Телефон</label><input id="b-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" required minlength="10" placeholder="+7 900 000-00-00"></div>
+          <div class="field"><label for="b-date">Дата</label><input id="b-date" name="date" type="date" required></div>
+          <div class="field"><label for="b-time">Время</label><input id="b-time" name="time" type="time" min="08:00" max="22:00" step="1800" value="19:00" required></div>
+          <div class="field full"><label for="b-guests">Гостей</label>
+            <select id="b-guests" name="guests">
+              <option>1</option><option selected>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7–10</option><option>Больше 10</option>
+            </select>
+          </div>
+          <div class="field full"><label for="b-note">Пожелания</label><textarea id="b-note" name="note" placeholder="Например: столик у окна или детский стул"></textarea></div>
+          <button class="btn" type="submit">Отправить заявку
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+          <p class="form-fine">Нажимая кнопку, вы соглашаетесь на обработку персональных данных.</p>
+        </form>
+
+        <div class="done" id="book-done" hidden tabindex="-1">
+          <div class="done-mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
+          <h3>Заявка принята</h3>
+          <p data-done-text></p>
+          <p><small>Это демо: на настоящем сайте заявка сразу приходит администратору в Telegram.</small></p>
+          <button class="btn btn-ghost" type="button" data-again>Новая заявка</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="visit">
+    <div class="wrap visit-grid">
+      <div class="visit-copy">
+        <span class="eyebrow">Контакты</span>
+        <h2>Как нас найти</h2>
+        <p class="address">ул. Садовая, 12<small>Ищите летнюю веранду у входа. Рядом есть бесплатная парковка.</small></p>
+        <table class="hours">
+          <tbody>
+            <tr data-days="1,2,3,4,5"><td>Понедельник — пятница</td><td>7:30 — 22:00</td></tr>
+            <tr data-days="6,0"><td>Суббота и воскресенье</td><td>8:00 — 23:00</td></tr>
+          </tbody>
+        </table>
+        <div class="maps">
+          <a class="btn btn-ghost" href="https://yandex.ru/maps/" target="_blank" rel="noopener">Яндекс Карты</a>
+          <a class="btn btn-ghost" href="https://2gis.ru/" target="_blank" rel="noopener">2ГИС</a>
+          <a class="btn btn-ghost" href="https://maps.google.com/" target="_blank" rel="noopener">Google Maps</a>
+        </div>
+      </div>
+      <div class="visit-media drift rise">
+        <img src="img/street.jpg" width="1400" height="900" alt="Вход в кофейню с летней верандой" loading="lazy" decoding="async">
+        <span class="pin"><i></i>Мы здесь</span>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div><h3>Адрес</h3><p>ул. Садовая, 12</p></div>
+      <div><h3>Часы</h3><p>Пн–Пт 7:30–22:00<br>Сб–Вс 8:00–23:00</p></div>
+      <div><h3>Связь</h3><p>+7 000 000-00-00</p><a href="https://t.me/" target="_blank" rel="noopener">Telegram</a></div>
+      <div><h3>Соцсети</h3><a href="https://vk.com/" target="_blank" rel="noopener">ВКонтакте</a><a href="https://t.me/" target="_blank" rel="noopener">Telegram-канал</a></div>
+    </div>
+    <p class="wordmark" aria-hidden="true">пенка<span>.</span></p>
+    <div class="footer-fine"><span>© 2026 Кофейня «Пенка»</span><span>Демо-концепт для портфолио. Кофейня вымышленная.</span></div>
+  </div>
+</footer>
+
+<nav class="actionbar" aria-label="Быстрые действия">
+  <a href="tel:+70000000000"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg>Звонок</a>
+  <a href="#visit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>Маршрут</a>
+  <a href="#book">Забронировать</a>
+</nav>
+
+<script>
+const HOURS = { weekday: ['7:30', '22:00'], weekend: ['8:00', '23:00'] };
+const BATCHES = ['8:00', '10:30', '13:00', '15:30', '18:00'];
+
+const at = (day, hm) => { const [h, m] = hm.split(':'); const d = new Date(day); d.setHours(+h, +m, 0, 0); return d; };
+const hoursFor = d => (d.getDay() % 6 === 0 ? HOURS.weekend : HOURS.weekday);
+const tomorrow = d => { const t = new Date(d); t.setDate(t.getDate() + 1); return t; };
+
+function status(now) {
+  const [open, close] = hoursFor(now);
+  if (now < at(now, open)) return { open: false, text: `Закрыто · откроемся в ${open}` };
+  if (now >= at(now, close)) return { open: false, text: `Закрыто · завтра с ${hoursFor(tomorrow(now))[0]}` };
+  const left = Math.round((at(now, close) - now) / 60000);
+  return { open: true, text: left <= 60 ? `Открыто · закроемся через ${left} мин` : `Открыто до ${close}` };
+}
+
+function nextBatch(now) {
+  const today = BATCHES.find(b => at(now, b) > now);
+  return today ? { label: today, time: at(now, today) } : { label: BATCHES[0], time: at(tomorrow(now), BATCHES[0]) };
+}
+
+// Self-check on a fixed Thursday, 29 Oct 2026
+console.assert(nextBatch(new Date(2026, 9, 29, 9, 0)).label === '10:30', 'next batch same day');
+console.assert(nextBatch(new Date(2026, 9, 29, 19, 0)).time.getDate() === 30, 'next batch rolls to tomorrow');
+console.assert(!status(new Date(2026, 9, 29, 6, 0)).open && status(new Date(2026, 9, 29, 21, 30)).text.includes('30 мин'), 'status');
+
+const pad = n => String(n).padStart(2, '0');
+function tick() {
+  const now = new Date();
+  const s = status(now);
+  document.querySelectorAll('[data-status]').forEach(el => { el.textContent = s.text; el.classList.toggle('is-open', s.open); });
+
+  const next = nextBatch(now);
+  const sec = Math.max(0, Math.floor((next.time - now) / 1000));
+  document.querySelector('[data-oven-timer]').innerHTML = `${pad(sec / 3600 | 0)}:${pad(sec / 60 % 60 | 0)}:${pad(sec % 60)}<small>в ${next.label}</small>`;
+  document.querySelector('[data-oven-label]').textContent = next.time.getDate() === now.getDate() ? 'Следующая партия через' : 'Первая партия завтра через';
+  document.querySelectorAll('[data-batch]').forEach(li => {
+    li.classList.toggle('done', next.time.getDate() === now.getDate() && at(now, li.dataset.batch) <= now);
+    li.classList.toggle('next', li.dataset.batch === next.label);
+  });
+}
+tick();
+setInterval(tick, 1000);
+
+document.querySelectorAll('.hours tr').forEach(tr => tr.classList.toggle('today', tr.dataset.days.split(',').includes(String(new Date().getDay()))));
+
+// Menu tabs
+const tabs = [...document.querySelectorAll('[role="tab"]')];
+const photo = document.getElementById('menu-photo');
+function select(tab) {
+  const swap = () => {
+    tabs.forEach(t => {
+      const on = t === tab;
+      t.setAttribute('aria-selected', on);
+      t.tabIndex = on ? 0 : -1;
+      document.getElementById(t.getAttribute('aria-controls')).hidden = !on;
+    });
+    photo.src = tab.dataset.img;
+    photo.alt = tab.dataset.alt;
+    return photo.decode().catch(() => {});
+  };
+  document.startViewTransition ? document.startViewTransition(swap) : swap();
+}
+tabs.forEach((tab, i) => {
+  tab.addEventListener('click', () => select(tab));
+  tab.addEventListener('keydown', e => {
+    const step = { ArrowRight: 1, ArrowLeft: -1 }[e.key];
+    if (!step) return;
+    const next = tabs[(i + step + tabs.length) % tabs.length];
+    select(next);
+    next.focus();
+  });
+});
+
+// Mobile menu: close after picking a section
+const nav = document.getElementById('nav');
+nav.addEventListener('click', e => { if (e.target.closest('a') && nav.matches(':popover-open')) nav.hidePopover(); });
+
+// Booking form. shortcut: the demo only shows a confirmation; connect a Telegram bot or form service per client.
+const form = document.getElementById('book-form');
+const done = document.getElementById('book-done');
+const date = document.getElementById('b-date');
+const iso = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+date.min = date.value = iso(new Date());
+form.addEventListener('submit', e => {
+  e.preventDefault();
+  const f = new FormData(form);
+  const day = new Date(f.get('date') + 'T00:00').toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' });
+  done.querySelector('[data-done-text]').textContent = `${f.get('name')}, ждём вас ${day} в ${f.get('time')}. Перезвоним на ${f.get('phone')} в течение 10 минут.`;
+  form.hidden = true;
+  done.hidden = false;
+  done.focus();
+});
+done.querySelector('[data-again]').addEventListener('click', () => {
+  form.reset();
+  date.value = iso(new Date());
+  done.hidden = true;
+  form.hidden = false;
+});
+</script>
